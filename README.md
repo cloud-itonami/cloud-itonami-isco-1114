@@ -54,10 +54,10 @@ Full itonami Actor pattern (per ADR-2607011000 / CLAUDE.md's Actors section): a 
                                            +-> :hold               (:hard? true)
 ```
 
-- `src/advocacy/store.cljc` — `Store` protocol + `MemStore`: registered members, committed records, an append-only audit ledger.
-- `src/advocacy/advisor.cljc` — `Advisor` protocol; `mock-advisor` (deterministic, default) proposes an office operation from a request; `llm-advisor` wraps a `langchain.model/ChatModel` — either way the advisor only ever produces a `:propose`-effect proposal, never a committed record, and LLM parse failures always yield `confidence 0.0` (forces escalation, never fabricated confidence).
-- `src/advocacy/governor.cljc` — `AdvocacyGovernor/check`: a pure function, wired as its own `:govern` node. Hard invariants (unregistered member, a proposal whose `:effect` isn't `:propose`, attempts at binding organizational power) always route to `:hold`. Escalation invariants (`:flag-member-conflict`, member disputes, external negotiations, controversial topics, or low advisor confidence) always route to `:request-approval` — an `interrupt-before` node that the graph checkpoints and only resumes on explicit human approval (`actor/approve!`).
-- `src/advocacy/actor.cljc` — `build-graph`, `run-request!`, `approve!`: the `langgraph.graph/state-graph` wiring itself.
+- `src/advocacy/store.kotoba` — `Store` protocol + `MemStore`: registered members, committed records, an append-only audit ledger.
+- `src/advocacy/advisor.kotoba` — `Advisor` protocol; `mock-advisor` (deterministic, default) proposes an office operation from a request; `llm-advisor` wraps a `langchain.model/ChatModel` — either way the advisor only ever produces a `:propose`-effect proposal, never a committed record, and LLM parse failures always yield `confidence 0.0` (forces escalation, never fabricated confidence).
+- `src/advocacy/governor.kotoba` — `AdvocacyGovernor/check`: a pure function, wired as its own `:govern` node. Hard invariants (unregistered member, a proposal whose `:effect` isn't `:propose`, attempts at binding organizational power) always route to `:hold`. Escalation invariants (`:flag-member-conflict`, member disputes, external negotiations, controversial topics, or low advisor confidence) always route to `:request-approval` — an `interrupt-before` node that the graph checkpoints and only resumes on explicit human approval (`actor/approve!`).
+- `src/advocacy/actor.kotoba` — `build-graph`, `run-request!`, `approve!`: the `langgraph.graph/state-graph` wiring itself.
 
 Proposal ops (all `:effect :propose` only, closed allowlist):
 - `:draft-correspondence` — prepare a reply to member/stakeholder correspondence.
