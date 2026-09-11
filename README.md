@@ -66,7 +66,7 @@ Proposal ops (all `:effect :propose` only, closed allowlist):
 - `:flag-member-conflict` — surface a member/stakeholder conflict for the official's attention (always escalates).
 
 ```bash
-clojure -M:test
+kbb -M:test
 ```
 
 This is what backs this repo's `:maturity :implemented` entry in [`kotoba-lang/occupation`](https://github.com/kotoba-lang/occupation).
